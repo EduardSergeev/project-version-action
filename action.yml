@@ -1,0 +1,22 @@
+name: 'Set project version'
+description: 'Set project version to YYYY.MM.DD.BUILD'
+
+inputs:
+  version-file:
+    description: 'File containing project version'
+    required: false
+    default: package.json
+  version-stub:
+    required: false
+    default: '0.0.0'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get current date and github run number
+      run: echo "VERSION=$(date +%Y.%m.%d).${{ github.run_number }}" > $GITHUB_ENV
+      shell: bash
+    
+    - name: Set project version to '${{ env.VERSION }}'
+      run: sed -i 's/${{ inputs.version-stub }}/${{ env.VERSION }}/' ${{ inputs.version-file }}
+      shell: bash
