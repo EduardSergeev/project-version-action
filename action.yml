@@ -10,13 +10,19 @@ inputs:
     required: false
     default: '0.0.0'
 
+outputs:
+  project-version:
+    description: "Project version"
+    value: ${{ steps.set-version.outputs.project-version }}
+
 runs:
   using: "composite"
   steps:
-    - name: Get current date and github run number
-      run: echo "VERSION=$(date +%Y.%m.%d).${{ github.run_number }}" > $GITHUB_ENV
-      shell: bash
-    
-    - name: Set project version to '${{ env.VERSION }}'
-      run: sed -i 's/${{ inputs.version-stub }}/${{ env.VERSION }}/' ${{ inputs.version-file }}
+    - name: Set project version to current date in YYYY.MM.DD.BUILD format
+      id: set-version
+      run: |
+        VERSION=$(date +%Y.%m.%d).${{ github.run_number }}
+        echo "Set project version to '$VERSION'"
+        sed -i "s/${{ inputs.version-stub }}/$VERSION/" ${{ inputs.version-file }}
+        echo "::set-output name=project-version::$VERSION"
       shell: bash
