@@ -25,4 +25,5 @@ runs:
         echo "Set project version to '$VERSION'"
         sed -i "s/${{ inputs.version-stub }}/$VERSION/" ${{ inputs.version-file }}
         echo "::set-output name=project-version::$VERSION"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
       shell: bash
