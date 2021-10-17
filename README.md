@@ -43,5 +43,5 @@ If a different from `package.json` file is used or a different from `0.0.0` stub
       uses: EduardSergeev/project-version-action@v2
       with:
         version-file: example.csproj
-        version-stub: '65534.65534.65534.65534'
+        version-stub: '65534.65534.65534.65533'
 ```
