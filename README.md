@@ -33,14 +33,14 @@ Add `EduardSergeev/project-version-action@v1` to your CI script after `actions/c
 
 ```yml
     - name: Set project version
-      uses: EduardSergeev/project-version-action@v1
+      uses: EduardSergeev/project-version-action@v2
 ```
 
 If a different from `package.json` file is used or a different from `0.0.0` stub version value was specified set `project-file` and `version-stub` input parameters accordingly. For example for .NET project it could be:
 
 ```yml
     - name: Set project version
-      uses: EduardSergeev/project-version-action@v1
+      uses: EduardSergeev/project-version-action@v2
       with:
         version-file: example.csproj
         version-stub: '65534.65534.65534.65534'
