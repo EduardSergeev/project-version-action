@@ -1,0 +1,14 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^9.1.3"
+  }
+}

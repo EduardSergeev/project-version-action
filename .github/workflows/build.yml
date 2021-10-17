@@ -1,0 +1,27 @@
+name: build
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Australia/Sydney
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set project version for Node project
+      uses: './'
+      with:
+        version-file: test/node/example/package.json    
+    - name: Test if version '${{ env.VERSION }}' is correctly set for Node project
+      run: cd test/node/example && npm install && npm test
+
+    - name: Set project version for .NET project
+      uses: './'
+      with:
+        version-file: test/dotnet/example/example.csproj
+        version-stub: '0.0.0.0'      
+    - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project
+      run: dotnet test test/dotnet/example -- TestRunParameters.Parameter\(name=\"version\",\ value=\"${{ env.VERSION }}\"\)
