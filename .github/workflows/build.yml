@@ -10,8 +10,16 @@ jobs:
       TZ: Australia/Sydney
     steps:
     - uses: actions/checkout@v2
+
+    - name: Set project version for Node project
+      uses: './'
+      with:
+        version-file: test/node/example/package.json    
+    - name: Test if version '${{ env.VERSION }}' is correctly set for Node project
+      run: cd test/node/example && npm install && npm test
+
     - name: Set project version for .NET project
-      uses: EduardSergeev/project-version-action@v1
+      uses: './'
       with:
         version-file: test/dotnet/example/example.csproj
         version-stub: '0.0.0.0'      
