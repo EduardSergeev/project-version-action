@@ -14,6 +14,11 @@ Example of resulting version: `2021.10.17.123`.
 - `version-stub`: (optional) stub version value  
   Defaults to: `'0.0.0'`
 
+## Output parameters
+
+- `project-version`: is set to the resulting version and can be referenced in subsequent steps via `steps.step_id.outputs.project-version`
+- `VERSION`: (environment variable) is also set to resulting project version, is set for subsequent steps and has shorter syntax `${{ env.VERSION }}`
+
 ## Usage
 
 In your project set version to some predefined stub version value. This value should probably still be a valid version number if you intend to compile your project outside Github action. For example in Node project `package.json` by default is expected to contain stub version `0.0.0`:
