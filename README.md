@@ -15,6 +15,9 @@ This format of versioning is better suited for projects with continious delivery
   Defaults to: `package.json`
 - `version-stub`: (optional) stub version value  
   Defaults to: `'0.0.0'`
+- `leading-zeros`: (optional) pad month and day with `0` for a single-digit values  
+  Defaults to `true` e.g `2021/06/07` current date by default results in `2021.06.07.123` version and otherwise in `2021.6.7.123`
+
 
 ## Output parameters
 
@@ -34,18 +37,28 @@ In your project set version to some predefined stub version value. This value sh
 Add `EduardSergeev/project-version-action@v1` to your CI script after `actions/checkout@v2` step:
 
 ```yml
-    - name: Set project version
+    - name: Set project version for Node project
       uses: EduardSergeev/project-version-action@main
 ```
 
 If a different from `package.json` file is used or a different from `0.0.0` stub version value was specified set `project-file` and `version-stub` input parameters accordingly. For example for .NET project it could be:
 
 ```yml
-    - name: Set project version
+    - name: Set project version for .NET project
       uses: EduardSergeev/project-version-action@main
       with:
         version-file: example.csproj
         version-stub: '65534.65534.65534.65534'
+```
+
+By default this action pads single-digit "month" and "day" bits of the resulting version with `0` but since some build systems, like Cabal does not allow leading zeros in version parts use `leading-zeroes: false` to prevent the padding:
+
+```yml
+    - name: Set project version for Cabal project
+      uses: EduardSergeev/project-version-action@main
+      with:
+        version-file: example.cabal
+        leading-zeros: false
 ```
 
 Since this action uses action runner's local date/time, which is by default is UTC, the resulting version might be one day before or after your local date, depending on your local time zone. To avoid this situation simply set runner's time zone to your local time zone, e.g.:

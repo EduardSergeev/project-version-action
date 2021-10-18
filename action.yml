@@ -7,8 +7,13 @@ inputs:
     required: false
     default: package.json
   version-stub:
+    description: 'Version hardcoded in project file and replaced with resulting one'
     required: false
     default: '0.0.0'
+  leading-zeros:
+    description: 'Pad month and day with 0: 06 vs 6'
+    required: false
+    default: true
 
 outputs:
   project-version:
@@ -21,7 +26,7 @@ runs:
     - name: Set project version to current date in YYYY.MM.DD.BUILD format
       id: set-version
       run: |
-        VERSION=$(date +%Y.%m.%d).${{ github.run_number }}
+        VERSION=$(date $([[ ${{ inputs.leading-zeros }} = true ]] && echo '+%Y.%m.%d' || echo '+%Y.%-m.%-d')).${{ github.run_number }}
         echo "Set project version to '$VERSION'"
         sed -i "s/${{ inputs.version-stub }}/$VERSION/" ${{ inputs.version-file }}
         echo "::set-output name=project-version::$VERSION"
