@@ -29,7 +29,8 @@ jobs:
     - name: Set project version for Cabal project
       uses: './'
       with:
-        version-file: test/cabal/example/example.cabal    
+        version-file: test/cabal/example/example.cabal
+        leading-zeros: false    
     - name: Test if version '${{ env.VERSION }}' is correctly set for Cabal project
       run: cd test/cabal/example && cabal build
 
@@ -41,5 +42,6 @@ jobs:
       uses: './'
       with:
         version-file: test/cabal/example/example.cabal    
+        leading-zeros: false    
     - name: Test if version '${{ env.VERSION }}' is correctly set for Cabal project
       run: cd test/cabal/example && cabal build
