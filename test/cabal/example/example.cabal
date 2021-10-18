@@ -1,0 +1,8 @@
+Name:               example
+Version:            0.0.0
+Build-type:         Simple
+Cabal-version:      >=1.10
+Library
+  default-language: Haskell2010
+  build-depends:
+    base >= 3.0
