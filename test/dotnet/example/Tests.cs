@@ -1,15 +1,15 @@
 using NUnit.Framework;
 using static System.Diagnostics.FileVersionInfo;
+using static System.Environment;
 using static System.Reflection.Assembly;
 
 namespace Tests
 {
     public class Version
     {
-        string Expected =>
-            TestContext.Parameters["version"] ?? "0.0.0.0";
-        System.Reflection.Assembly Assembly =>
-            GetExecutingAssembly();
+        string Expected => GetEnvironmentVariable("VERSION") ?? "0.0.0.0";
+
+        System.Reflection.Assembly Assembly => GetExecutingAssembly();
 
         [Test]
         public void AssemblyVersion()
