@@ -3,14 +3,14 @@ name: build
 on:
   push:
 
+env:
+  TZ: Australia/Sydney
+
 jobs:
-  build:
+  node-test:
     runs-on: ubuntu-latest
-    env:
-      TZ: Australia/Sydney
     steps:
     - uses: actions/checkout@v2
-
     - name: Set project version for Node project
       uses: './'
       with:
@@ -18,6 +18,10 @@ jobs:
     - name: Test if version '${{ env.VERSION }}' is correctly set for Node project
       run: cd test/node/example && npm install && npm test
 
+  dotnet-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
     - name: Set project version for .NET project
       uses: './'
       with:
@@ -26,6 +30,10 @@ jobs:
     - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project
       run: dotnet test test/dotnet/example -- TestRunParameters.Parameter\(name=\"version\",\ value=\"${{ env.VERSION }}\"\)
 
+  cabal-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
     - name: Set project version for Cabal project
       uses: './'
       with:
@@ -34,10 +42,12 @@ jobs:
     - name: Test if version '${{ env.VERSION }}' is correctly set for Cabal project
       run: cd test/cabal/example && cabal build
 
-    - name: Set current date to '2021.06.07' (leading zeros)
-      run: |
-        git reset --hard
-        sudo date -s 2021-06-07
+  cabal-leading-zeros-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set current date to '2021.06.07'
+      run: sudo date -s 2021-06-07
     - name: Set project version for Cabal project
       uses: './'
       with:
