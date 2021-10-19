@@ -32,26 +32,19 @@ jobs:
 
   cabal-test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        date: ['current', '2021-06-07']
     steps:
     - uses: actions/checkout@v2
+    - name: Set current date to ${{ matrix.date }}
+      if: ${{ matrix.date != 'current' }}
+      run: sudo date -s ${{ matrix.date }}
     - name: Set project version for Cabal project
       uses: './'
       with:
         version-file: test/cabal/example/example.cabal
         leading-zeros: false    
     - name: Test if version '${{ env.VERSION }}' is correctly set for Cabal project
-      run: cd test/cabal/example && cabal build
-
-  cabal-leading-zeros-test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set current date to '2021.06.07'
-      run: sudo date -s 2021-06-07
-    - name: Set project version for Cabal project
-      uses: './'
-      with:
-        version-file: test/cabal/example/example.cabal    
-        leading-zeros: false    
-    - name: Test if version '${{ env.VERSION }}' is correctly set for Cabal project
-      run: cd test/cabal/example && cabal build
+      run: cd test/cabal/example && cabal update && cabal test
