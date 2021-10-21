@@ -17,6 +17,8 @@ This format of versioning is better suited for projects with continious delivery
   Defaults to: `'0.0.0'`
 - `leading-zeros`: (optional) pad month and day with `0` for a single-digit values  
   Defaults to `true` e.g `2021/06/07` current date by default results in `2021.06.07.123` version and otherwise in `2021.6.7.123`
+- `time-zone`: (optional) time zone to be used to determine the current date/time  
+  If not set the action runner current date/time is used 
 
 
 ## Output parameters
@@ -61,7 +63,7 @@ By default this action pads single-digit "month" and "day" bits of the resulting
         leading-zeros: false
 ```
 
-Since this action uses action runner's local date/time, which is by default is UTC, the resulting version might be one day before or after your local date, depending on your local time zone. To avoid this situation simply set runner's time zone to your local time zone, e.g.:
+Since this action uses action runner's local date/time, which is by default is UTC, the resulting version might be one day before or after your local date, depending on your local time zone. To avoid this situation you can either set runner's time zone to your local time zone, e.g.:
 
 ```yml
 jobs:
@@ -70,3 +72,14 @@ jobs:
     env:
       TZ: Australia/Sydney
 ```
+
+or set input parameter `time-zone` to your local time zone, e.g.:
+
+```yml
+    - name: Set project version for Node project
+      uses: EduardSergeev/project-version-action@main
+      with:
+        time-zone: Australia/Sydney
+```
+
+The former will change time zone for entire action job while the latter will use it only to calculate the version without changing it for the runner.
