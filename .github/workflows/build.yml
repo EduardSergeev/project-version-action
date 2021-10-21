@@ -3,12 +3,11 @@ name: build
 on:
   push:
 
-env:
-  TZ: Australia/Sydney
-
 jobs:
   node-test:
     runs-on: ubuntu-latest
+    env:
+      TZ: Australia/Sydney
     steps:
     - uses: actions/checkout@v2
     - name: Set project version for Node project
@@ -25,6 +24,7 @@ jobs:
     - name: Set project version for .NET project
       uses: './'
       with:
+        time-zone: Australia/Sydney
         version-file: test/dotnet/example/example.csproj
         version-stub: '0.0.0.0'      
     - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project
@@ -48,3 +48,25 @@ jobs:
         leading-zeros: false    
     - name: Test if version '${{ env.VERSION }}' is correctly set for Cabal project
       run: cd test/cabal/example && cabal update && cabal test
+
+  time-zone-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - {  }
+          - { TZ: Australia/Sydney }
+        time-zone:
+          - 
+          - America/New_York
+    runs-on: ubuntu-latest
+    env: ${{ matrix.env }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set project version for Node project
+      uses: './'
+      with:
+        version-file: test/node/example/package.json
+        time-zone: ${{ matrix.time-zone }}
+    - name: Test if version '${{ env.VERSION }}' is correctly set for Node project
+      run: cd test/node/example && npm install && npm test
