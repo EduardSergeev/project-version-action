@@ -35,4 +35,7 @@ runs:
         sed -i "s/${{ inputs.version-stub }}/$VERSION/" ${{ inputs.version-file }}
         echo "::set-output name=project-version::$VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "::group::Modified ${{ inputs.version-file }}"
+        cat ${{ inputs.version-file }}
+        echo "::endgroup::"
       shell: bash
