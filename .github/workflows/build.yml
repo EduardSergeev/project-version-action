@@ -64,7 +64,7 @@ jobs:
         file: test/dotnet/attribute/Dockerfile
         tags: ${{ env.IMAGE }}:${{ env.VERSION }}
     - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project via AssemblyInfo.cs
-      run: docker run -it --rm ${{ env.IMAGE }}:${{ env.VERSION }}
+      run: docker run --rm ${{ env.IMAGE }}:${{ env.VERSION }}
 
   cabal-test:
     runs-on: ubuntu-latest
