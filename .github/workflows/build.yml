@@ -30,6 +30,19 @@ jobs:
     - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project
       run: cd test/dotnet/example && dotnet test
 
+  dotnet-cs-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set project version for .NET project via AssemblyInfo.cs
+      uses: './'
+      with:
+        time-zone: Australia/Sydney
+        version-file: test/dotnet/attribute/properties/AssemblyInfo.cs
+        version-stub: '0.0.0.0'      
+    - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project via AssemblyInfo.cs
+      run: cd test/dotnet/attribute && dotnet test
+
   cabal-test:
     runs-on: ubuntu-latest
     strategy:
