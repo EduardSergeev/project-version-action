@@ -26,7 +26,8 @@ jobs:
       with:
         time-zone: Australia/Sydney
         version-file: test/dotnet/example/example.csproj
-        version-stub: '0.0.0.0'      
+        version-stub: '0.0.0.0'
+        leading-zeros: false
     - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project
       run: cd test/dotnet/example && dotnet test
 
@@ -40,6 +41,7 @@ jobs:
         time-zone: Australia/Sydney
         version-file: test/dotnet/attribute/properties/AssemblyInfo.cs
         version-stub: '0.0.0.0'      
+        leading-zeros: false
     - name: Test if version '${{ env.VERSION }}' is correctly set for .NET project via AssemblyInfo.cs
       run: cd test/dotnet/attribute && dotnet test
 
