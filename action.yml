@@ -33,7 +33,7 @@ runs:
         VERSION=$(date $([[ ${{ inputs.leading-zeros }} = true ]] && echo '+%Y.%m.%d' || echo '+%Y.%-m.%-d')).${{ github.run_number }}
         echo "Set project version to '$VERSION'"
         sed -i "s/${{ inputs.version-stub }}/$VERSION/" ${{ inputs.version-file }}
-        echo "::set-output name=project-version::$VERSION"
+        echo "project-version=$VERSION" >> $GITHUB_OUTPUT
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "::group::Modified ${{ inputs.version-file }}"
         cat ${{ inputs.version-file }}
