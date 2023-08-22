@@ -80,3 +80,20 @@ jobs:
         time-zone: ${{ matrix.time-zone }}
     - name: Test if version '${{ env.VERSION }}' is correctly set for Node project
       run: cd test/node/example && npm install && npm test
+
+  only-version-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set env.VERSION
+      id: set-version
+      uses: './'
+    - name: Check if env.VERSION is correctly set
+      run: |
+        if [[ -z "${{ env.VERSION }}" ]]; then
+          exit 1
+        elif [[ -z "${{ steps.set-version.outputs.project-version }}" ]]; then
+          exit 2
+        elif [[ "${{ env.VERSION }}" != "${{ steps.set-version.outputs.project-version }}" ]]; then
+          exit 3
+        fi
