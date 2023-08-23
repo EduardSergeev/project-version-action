@@ -1,4 +1,7 @@
 # Project version action
+[![Build Status](https://github.com/EduardSergeev/project-version-action/workflows/build/badge.svg)](https://github.com/EduardSergeev/project-version-action/actions?query=workflow%3Abuild+branch%3Amain)
+[![Latest release](https://img.shields.io/github/v/release/EduardSergeev/project-version-action?label=release)](https://github.com/marketplace/actions/set-project-version)
+
 
 Sets project version to `YYYY.MM.DD.BUILD` where:
 - `YYYY.MM.DD` is the current action runner date
