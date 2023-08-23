@@ -88,6 +88,8 @@ jobs:
     - name: Set env.VERSION
       id: set-version
       uses: './'
+      with:
+        version-file-exists: false
     - name: Check if env.VERSION is correctly set
       run: |
         if [[ -z "${{ env.VERSION }}" ]]; then
