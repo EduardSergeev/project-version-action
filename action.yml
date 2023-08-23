@@ -17,6 +17,10 @@ inputs:
   time-zone:
     description: Time zone to be used to determine the current date/time
     required: false
+  version-file-exists:
+    description: Fail if specified version-file does not exist
+    required: false
+    default: true
 
 outputs:
   project-version:
@@ -31,11 +35,18 @@ runs:
       run: |
         [[ ${{ inputs.time-zone != '' }} ]] && export TZ=${{ inputs.time-zone }}
         VERSION=$(date $([[ ${{ inputs.leading-zeros }} = true ]] && echo '+%Y.%m.%d' || echo '+%Y.%-m.%-d')).${{ github.run_number }}
-        echo "Set project version to '$VERSION'"
-        sed -i "s/${{ inputs.version-stub }}/$VERSION/" ${{ inputs.version-file }}
+        if [ "${{ inputs.version-file-exists }}" = true ]; then
+          if test -f "${{ inputs.version-file }}"; then
+            echo "Set project version to '$VERSION'" && \
+            sed -i "s/${{ inputs.version-stub }}/$VERSION/" ${{ inputs.version-file }} && \
+            echo "::group::Modified ${{ inputs.version-file }}" && \
+            cat ${{ inputs.version-file }} && \
+            echo "::endgroup::"
+          else
+            echo "::error file=${{ inputs.version-file-exists }},line=1::${{ inputs.version-file-required }} could not be found but is required" && \
+            exit 1
+          fi
+        fi
         echo "project-version=$VERSION" >> $GITHUB_OUTPUT
         echo "VERSION=$VERSION" >> $GITHUB_ENV
-        echo "::group::Modified ${{ inputs.version-file }}"
-        cat ${{ inputs.version-file }}
-        echo "::endgroup::"
       shell: bash

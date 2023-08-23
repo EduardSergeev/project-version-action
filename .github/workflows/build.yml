@@ -9,7 +9,7 @@ jobs:
     env:
       TZ: Australia/Sydney
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set project version for Node project
       uses: './'
       with:
@@ -20,7 +20,7 @@ jobs:
   dotnet-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set project version for .NET project
       uses: './'
       with:
@@ -32,7 +32,7 @@ jobs:
   dotnet-cs-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set project version for .NET project via AssemblyInfo.cs
       uses: './'
       with:
@@ -48,7 +48,7 @@ jobs:
       matrix:
         date: ['current', '2021-06-07']
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set current date to ${{ matrix.date }}
       if: ${{ matrix.date != 'current' }}
       run: sudo date -s ${{ matrix.date }}
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     env: ${{ matrix.env }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set project version for Node project
       uses: './'
       with:
@@ -80,3 +80,50 @@ jobs:
         time-zone: ${{ matrix.time-zone }}
     - name: Test if version '${{ env.VERSION }}' is correctly set for Node project
       run: cd test/node/example && npm install && npm test
+
+  only-version-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set env.VERSION
+      id: set-version
+      uses: './'
+      with:
+        version-file-exists: false
+    - name: Check if env.VERSION is correctly set
+      run: |
+        if [[ -z "${{ env.VERSION }}" ]]; then
+          exit 1
+        elif [[ -z "${{ steps.set-version.outputs.project-version }}" ]]; then
+          exit 2
+        elif [[ "${{ env.VERSION }}" != "${{ steps.set-version.outputs.project-version }}" ]]; then
+          exit 3
+        fi
+
+  publish-release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs:
+      - node-test
+      - dotnet-test
+      - dotnet-cs-test
+      - cabal-test
+      - time-zone-test
+      - only-version-test
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_BODY_FILE: ${{ github.workspace }}/release-description.md
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create release notes
+        run: |
+          echo "RELEASE=$(git show -q --format=format:%s)" >> $GITHUB_ENV
+          git show -q --format=format:%b > ${{ env.RELEASE_BODY_FILE }}
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          commit: ${{ github.sha }}
+          name: ${{ env.RELEASE }}
+          bodyFile: ${{ env.RELEASE_BODY_FILE }}
+          makeLatest: ${{ github.ref == 'refs/heads/main' }}
+          prerelease: ${{ github.ref != 'refs/heads/main' }}
+  
