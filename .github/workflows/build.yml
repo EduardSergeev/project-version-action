@@ -124,6 +124,6 @@ jobs:
           commit: ${{ github.sha }}
           name: ${{ env.RELEASE }}
           bodyFile: ${{ env.RELEASE_BODY_FILE }}
-          makeLatest: ${{ github.ref == 'refs/heads/main' }}
-          prerelease: ${{ github.ref != 'refs/heads/main' }}
+          makeLatest: ${{ startsWith(github.event.base_ref, 'refs/heads/main') }}
+          prerelease: ${{ !startsWith(github.event.base_ref, 'refs/heads/main') }}
   
