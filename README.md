@@ -19,7 +19,9 @@ This format of versioning is better suited for projects with continious delivery
   Defaults to `false` e.g `2021/06/07` current date by default results in `2021.6.7.123` version and otherwise in `2021.06.07.123`
 - `time-zone`: (optional) time zone to be used to determine the current date/time  
   If not set the action runner current date/time is used 
-
+- `version-file-exists`: (optional) Check if specified by `version-file` parameter file does exist in repository
+  Defaults to: `true`. Set it to `false` if there is no `version-file` to set version in
+  e.g. when only `VERSION` environment variable is needed for build
 
 ## Output parameters
 
@@ -40,14 +42,14 @@ Add `EduardSergeev/project-version-action@v1` to your CI script after `actions/c
 
 ```yml
     - name: Set project version for Node project
-      uses: EduardSergeev/project-version-action@main
+      uses: EduardSergeev/project-version-action@v6
 ```
 
 If a different from `package.json` file is used or a different from `0.0.0.0` stub version value was specified set `project-file` and `version-stub` input parameters accordingly. For example for .NET project it could be:
 
 ```yml
     - name: Set project version for .NET project
-      uses: EduardSergeev/project-version-action@main
+      uses: EduardSergeev/project-version-action@v6
       with:
         version-file: example.csproj
         version-stub: '65534.65534.65534.65534'
@@ -57,7 +59,7 @@ By default this action does not pad single-digit "month" and "day" bits of the r
 
 ```yml
     - name: Set project version for Cabal project
-      uses: EduardSergeev/project-version-action@main
+      uses: EduardSergeev/project-version-action@v6
       with:
         version-file: example.cabal
         leading-zeros: true
@@ -77,9 +79,18 @@ or set input parameter `time-zone` to your local time zone, e.g.:
 
 ```yml
     - name: Set project version for Node project
-      uses: EduardSergeev/project-version-action@main
+      uses: EduardSergeev/project-version-action@v6
       with:
         time-zone: Australia/Sydney
 ```
 
 The former will change time zone for entire action job while the latter will use it only to calculate the version without changing it for the runner.
+
+If only `VERSION` environment variable (or `project-version` step's output parameter) is needed for a build and there is no `version-file` to set version in set `version-file-exists` input parameter to `false`, e.g.:
+
+```yml
+    - name: Set VERSION environment variable only
+      uses: EduardSergeev/project-version-action@v6
+      with:
+        version-file-exists: false
+```
