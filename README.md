@@ -53,7 +53,7 @@ Add `EduardSergeev/project-version-action@v6` to your CI script after `actions/c
       uses: EduardSergeev/project-version-action@v6
 ```
 
-All subsequent build steps then will be able to reference current build version ether via `VERSION` environment variable or via `project-version` step's output.
+All subsequent build steps then will be able to reference current build version either via `VERSION` environment variable or via `project-version` step's output parameter.
 
 ### Input parameters
 
