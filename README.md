@@ -10,7 +10,7 @@ Sets project version to `YYYY.MM.DD.BUILD` where:
 Resulting project version is unique but also meaningful since it also contains the date when the project was build.  
 Example of resulting version: `2021.10.17.123`.  
 
-This format of versioning is better suited for projects with continious delivery model of development: when releases are frequient and with relatively small incremental changes in between. For this type of projects [semver](https://semver.org) does not make much sense while the actual date in version format does.
+This format of versioning is better suited for projects with continuous delivery model of development: when releases are frequent and with relatively small incremental changes in between. For this type of projects [semver](https://semver.org) does not make much sense while the actual date in version format does.
 
 ## Input parameters
 
@@ -53,7 +53,7 @@ Add `EduardSergeev/project-version-action@v6` to your CI script after `actions/c
       uses: EduardSergeev/project-version-action@v6
 ```
 
-All subsequent build steps then will be able to reference current build version ither via `VERSION` environment variable or via `project-version` step's output.
+All subsequent build steps then will be able to reference current build version ether via `VERSION` environment variable or via `project-version` step's output.
 
 ### Input parameters
 
@@ -118,4 +118,4 @@ If only `VERSION` environment variable (or `project-version` step's output param
 
 ### Output parameter
 
-In addition to environment variable `VERSION` being set to the calculated current build number (which can be used in the subsequent build steps via `${{ env.VERSION }}` expression) this action alse sets output parameter `project-version` to the same build number which can read in the consequent build steps via `${{ steps.[this-action-step_id].outputs.project-version }}` expression.
+In addition to environment variable `VERSION` being set to the calculated current build number (which can be used in the subsequent build steps via `${{ env.VERSION }}` expression) this action also sets output parameter `project-version` to the same build number which can be read in the consequent build steps via `${{ steps.[this-action-step_id].outputs.project-version }}` expression.
